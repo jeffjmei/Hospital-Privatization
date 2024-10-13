@@ -1,0 +1,36 @@
+---
+title: Hospital Ownership
+output: html_document
+author: Jeffrey Mei
+date: 2024-10-12
+---
+
+# Hospital Ownership
+
+```{R, include=F}
+# Load Packages
+library(tidyverse) 
+library(readxl) # to read excel files
+```
+
+## Reading Data 
+```{R}
+project_directory <- "~/Documents/School/BIOS511/Project" # replace this with your own project directory
+#project_directory <- "~john/project_path..." # replace this with your own project directory
+
+conditions_path <- "/data/conditions/2024/HAC_MEASURE_PROVIDER_FILE_2024.csv"
+owners_path <- "/data/owners/2024-09/Hospital_All_Owners_2024.09.02.csv"
+npi_path <- "/data/owners/2024-09/Hospital_Additional_NPIs_2024.09.02.csv"
+addresses_path <- "/data/owners/2024-09/Hospital_Additional_Addresses_2024.09.02.csv"
+medicare_path <- "/data/medicare/2021/CPS MDCR INPT 2021.xlsx"
+patient_path <- "/data/PATIENT_REPORTED_OUTCOMES_FACILITY.csv"
+
+# Read Data
+conditions <- read.csv(paste(project_directory, conditions_path, sep=''))
+owners <- read.csv(paste(project_directory, owners_path, sep=''))
+npi <- read.csv(paste(project_directory, npi_path, sep=''))
+addresses <- read.csv(paste(project_directory, addresses_path, sep=''))
+patient <- read.csv(paste(project_directory, patient_path, sep=''))
+medicare <- read_excel(paste(project_directory, medicare_path, sep=''), col_names=TRUE)
+```
+

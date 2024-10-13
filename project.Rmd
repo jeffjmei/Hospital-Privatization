@@ -1,0 +1,143 @@
+---
+title: Project
+date: 2024-10-06
+tags: 
+---
+
+# Project 
+- literature review
+- statistical question
+- data sources
+  - how it was generated
+  - confounders
+  - issues (e.g. missing values)
+- exploratory analysis
+
+## Project ideas
+- predicting health outcomes
+- copy number variation paper
+
+### Mental Health Beds
+There are not enough beds in the United States. What is the impact on average mental health on communities. 
+
+### Wearable Devices 
+- classify different regimes of a time series
+- personalized fitness recommendations
+- predict disease outcome based on waveforms
+- optimal sleep hours
+- diet-exercise correlation
+
+### Natural Language Processing
+- read clinical notes and classify it
+- topic modeling
+
+### Disease Progression Modeling
+- predict disease outcome
+
+--- 
+
+Generate Treatment Plan
+- neural network to produce treatment plan
+- data: 
+
+--- 
+
+I want to work on something interesting. I feel like I struggle to work on projects if I feel uninspired to do them. Part of this is that I want to have something to show on my portfolio. Why not do a stellar job? 
+
+The question is what should I do? It means that I should not do something that has been done before. It should have a compelling mission. It should demonstrate some sort of prowess. 
+
+Perhaps I should use ANNs somehow. 
+- medical imaging classification
+- NLP: predict diagnoses from patient notes
+- image segmentation
+  - can do data augmentation to get more data
+- generative imaging
+  - might be useful for generating synthetic data
+
+### MRI Imaging 
+- how much data do you need? 
+- expert labeling
+  - what if we incorporate prediction-powered inference? 
+
+Proposal: 
+- we can produce a classification algorithm based on existing data
+- perhaps we can then get some untrained data and try to evaluate those
+- hopefully, we can apply prediction-powered inference to solve the problem
+- this justifies the usage in a competition to see how well we do
+
+**Prediction-Powered Inference**
+- can answer questions of 
+  - prevalence of disease
+  - odds ratio 
+  - estimate treatment effectiveness. 
+
+I need to have high predictive power in order to leverage PPI. 
+
+Project Outline
+- produce model for estimating treatment outcomes on labeled data
+  - must leave a fraction out for evaluation
+- find larger dataset
+  - this is the entire dataset 
+
+
+> [!IDEA]
+- prediction-powered counterfactuals
+  - we can predict with high fidelity the success of treatments
+
+
+--- 
+John proposed evaluating the ownership of a hospital to outcomes 
+- ultimately, this is a regression task
+
+What else can be done? 
+- [x] search for relevant literature
+- [ ] search for data
+  - [ ] hospital information
+  - [ ] patient information
+
+---
+
+## Planning
+What is the best way to organize this project? 
+
+In my opinion, it makes sense to try to reduce down the kinds of questions we want to answer. Afterwards, we can try to identify the data that can test our hypothesis. One of the major concerns is that we do not know whether or not the data will be adequate enough to solve the problem. 
+
+Nevertheless, the problem I am asking is how we should organize the project. That is, I was thinking of using Google Colab, but it is primarily used for Python. What if we use GitLab? 
+
+1. Identify Scientific Questions
+2. Identify Data Sources
+
+### Setting Up GitHub
+- `/data`
+- `/scripts`
+  - `data_cleaning.R`
+  - `data_analysis.R`
+  - `visualization.R`
+- `/notebooks`
+- `/output`
+- `/docs`
+- `/R`
+- `/tests`
+
+---
+**Title**: Are Patients Paying for Healthcare Privatization? 
+
+**Questions**: 
+- who owns hospitals in other countries? 
+- why would private ownership change the companies? 
+  - financial returns are emphasized over patient care
+- what is the proportion of hospitals that were being bought over time?
+
+**Scientific Questions**:
+
+**Tasks**:
+- [ ] aggregate data
+  - [ ] combine hospitals to patients
+  - [ ] combine hospital to owners
+  - [ ] associate hospitals to costs
+- [ ] aggregate list of questions
+
+**Sources**:
+- Paper: [Effect of Healthcare Privatization](https://www.thelancet.com/action/showPdf?pii=S2468-2667%2824%2900003-3)
+- Data: [Patient-Reported Outcomes](https://data.cms.gov/provider-data/dataset/mxtu-43qs#data-table)
+
