@@ -15,9 +15,13 @@ How does hospital ownership affect patient outcomes?
 
 ## Data Sources
 - [Hospital All Owners](https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/hospital-all-owners)  
+  - dataset on hospital ownership 
 - [Medicare Inpatient Hospital](https://data.cms.gov/summary-statistics-on-use-and-payments/medicare-service-type-reports/cms-program-statistics-medicare-inpatient-hospital)  
 - [Hospital-Acquired Measures](https://data.cms.gov/quality-of-care/deficit-reduction-act-hospital-acquired-condition-measures)  
 - [Patient-Reported Outcomes](https://data.cms.gov/provider-data/dataset/mxtu-43qs#data-table)  
+- [Hospital Provider Cost Report](https://data.cms.gov/provider-compliance/cost-report/hospital-provider-cost-report)
+  - lots of hospital information (can be linked via `Provider_CCN`)
+- [Hospital Change of Ownership](https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/hospital-change-of-ownership)
 
 
 

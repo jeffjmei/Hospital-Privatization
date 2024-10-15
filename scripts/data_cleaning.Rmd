@@ -26,11 +26,71 @@ medicare_path <- "/data/medicare/2021/CPS MDCR INPT 2021.xlsx"
 patient_path <- "/data/PATIENT_REPORTED_OUTCOMES_FACILITY.csv"
 
 # Read Data
-conditions <- read.csv(paste(project_directory, conditions_path, sep=''))
-owners <- read.csv(paste(project_directory, owners_path, sep=''))
-npi <- read.csv(paste(project_directory, npi_path, sep=''))
-addresses <- read.csv(paste(project_directory, addresses_path, sep=''))
-patient <- read.csv(paste(project_directory, patient_path, sep=''))
+conditions <- read_csv(paste(project_directory, conditions_path, sep=''))
+owners <- read_csv(paste(project_directory, owners_path, sep=''))
+npi <- read_csv(paste(project_directory, npi_path, sep=''))
+addresses <- read_csv(paste(project_directory, addresses_path, sep=''))
+patient <- read_csv(paste(project_directory, patient_path, sep=''))
 medicare <- read_excel(paste(project_directory, medicare_path, sep=''), col_names=TRUE)
 ```
+
+## Useful Variables
+
+Owners: 
+- `ORGANIZATION.NAME`
+- `TYPE...OWNER` 
+  - `I`: independent
+  - `O`: organization
+- `CORPORATION...OWNER`
+  - `Y`: if owner's organization is a corporation
+  - `N`: if owner's organization is not a corporation
+- `INVESTMENT.FIRM...OWNER`
+  - `Y`: if owner's organization is a investment firm
+  - `N`: if owner's organization is not a investment firm
+- `FOR.PROFIT...OWNER`
+  - `Y`: if owner's organization is a for-profit organization
+  - `N`: if owner's organization is not a for-profit organization
+- `NON.PROFIT...OWNER`
+  - `Y`: if owner's organization is a nonprofit
+  - `N`: if owner's organization is not a nonprofit
+
+```{R}
+owners %>% glimpse
+conditions %>% .$Provider_ID
+patient 
+```
+
+
+Conditions:
+- `Provider_ID`
+  - CCN ID: medicare provider number
+- `Measure`
+  - how well hospital did 
+
+
+Patient:
+- `Facility Name`
+  - can potentially match the `owners` dataset 
+  - the problem is that this is on the wrong level
+
+
+Conditions: 
+```{R}
+patient
+medicare
+```
+
+## Cleaning Data
+
+
+### Cleaning Conditions
+```{R}
+conditions
+owners
+npi 
+addresses
+patient
+medicare
+```
+
 
