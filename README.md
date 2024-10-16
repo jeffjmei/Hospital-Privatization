@@ -23,6 +23,7 @@ How does hospital ownership affect patient outcomes?
 - [Hospital Provider Cost Report](https://data.cms.gov/provider-compliance/cost-report/hospital-provider-cost-report)
   - lots of hospital information (can be linked via `Provider_CCN`)
 - [Hospital Change of Ownership](https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/hospital-change-of-ownership)
+- [Hospital General Information](https://data.cms.gov/provider-data/dataset/xubh-q36u)
 
 
 
