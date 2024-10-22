@@ -16,7 +16,8 @@ library(readxl) # to read excel files
 ## Reading Data 
 ```{R}
 project_directory <- "~/Documents/School/BIOS511/Project" # replace this with your own project directory
-#project_directory <- "~john/project_path..." # replace this with your own project directory
+#project_directory <- "~/Documents/2024.03 - Fall/BIOS511/Final Project/Hospital-Privatization" # replace this with your own project directory
+
 
 conditions_path <- "/data/conditions/2024/HAC_MEASURE_PROVIDER_FILE_2024.csv"
 owners_path <- "/data/owners/2024-09/Hospital_All_Owners_2024.09.02.csv"
