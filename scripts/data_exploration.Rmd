@@ -1,0 +1,101 @@
+---
+title: Data Exploration
+output: html_document
+author: Jeffrey Mei
+date: 2024-10-26
+---
+
+# Data Exploration
+
+```{R}
+# Read Data
+filepath <- "~/Documents/School/BIOS511/Project/data/owner_change.csv"
+owner_change <- read_csv(filepath)
+
+project_directory <- "~/Documents/School/BIOS511/Project"
+hospital_info_path <- "/data/HOSPITAL_INFO.csv"
+hospital_info <- read_csv(paste(project_directory, hospital_info_path, sep = ""))
+```
+
+```{R}
+# Histogram
+ggplot(owner_change, aes(x = `EFFECTIVE DATE`)) +
+  geom_histogram(binwidth = 30, color = "black", fill = "lightblue") +
+  labs(title = "Histogram of Effective Dates", x = "Effective Date", y = "Count") +
+  theme_minimal()
+```
+
+```{R}
+# Link Data
+hospital_changes <-
+  left_join(
+    owner_change %>% select(
+      "CCN - BUYER",
+      "CCN - SELLER",
+      "ORGANIZATION NAME - BUYER",
+      "ORGANIZATION NAME - SELLER",
+      "EFFECTIVE DATE"
+    ),
+    hospital_info %>% select(
+      "Facility ID",
+      "Facility Name"
+    ),
+    by = c("CCN - BUYER" = "Facility ID")
+  ) %>%
+  left_join(
+    hospital_info %>% select(
+      "Facility ID",
+      "Facility Name"
+    ),
+    by = c("CCN - SELLER" = "Facility ID")
+  ) %>%
+  # Renaming the Redundant Columns
+  rename(
+    "Facility Name - Buyer" = "Facility Name.x",
+    "Facility Name - Seller" = "Facility Name.y"
+  )
+```
+
+Let's make sure that we have a proportional sample throughout time. Once we filter out all _incomplete data_ - owner changes without buyer _and_ seller information - is our data missing at random? The following figure appears to support this claim. 
+
+```{R}
+hospital_changes %>%
+  # Add Temporary Label for Complete Data: Existing Buyer/Seller Info
+  mutate(complete = case_when(
+    is.na(`Facility Name - Buyer`) |
+      is.na(`Facility Name - Seller`) ~ "Missing",
+    TRUE ~ "Complete"
+  )) %>%
+  mutate(complete = factor(complete, levels = c("Missing", "Complete"))) %>%
+  # Plot Histogram
+  ggplot(
+    aes(
+      x = `EFFECTIVE DATE`,
+      fill = complete,
+    )
+  ) +
+  geom_histogram(
+    binwidth = 30,
+    color = "black",
+    alpha = 0.5,
+    position = "stack"
+  ) +
+
+  # Set Legend
+  scale_fill_manual(
+    name = "Data Completeness",
+    values = c("Complete" = "red", "Missing" = "gray"),
+    labels = c("Complete" = "Complete Data", "Missing" = "Missing Data")
+  ) +
+
+  # Additional aesthetics
+  labs(
+    title = "Hospital Changes Histogram",
+    x = "Effective Date",
+    y = "Count"
+  ) +
+  theme_minimal()
+```
+
+
+
