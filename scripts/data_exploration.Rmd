@@ -12,7 +12,9 @@ date: 2024-10-26
 filepath <- "~/Documents/School/BIOS511/Project/data/owner_change.csv"
 owner_change <- read_csv(filepath)
 
-project_directory <- "~/Documents/School/BIOS511/Project"
+#project_directory <- "~/Documents/School/BIOS511/Project"
+project_directory <- "~/Documents/2024.03 - Fall/BIOS511/Final Project/Hospital-Privatization" # replace this with your own project directory
+
 hospital_info_path <- "/data/HOSPITAL_INFO.csv"
 hospital_info <- read_csv(paste(project_directory, hospital_info_path, sep = ""))
 ```
@@ -96,6 +98,29 @@ hospital_changes %>%
   ) +
   theme_minimal()
 ```
+
+Pivot the survey data to make it more usable. Each hospital should have one row consisting of all available survey data. Also remove any columns that seem to have no data in them at all. 
+```{r}
+PES_path <- "/data/PE Hospital Tracker.csv"
+survey_path <- "/data/patient_survey/HCAHPS-Hospital.csv"
+PES_data <- read_csv(paste(project_directory, PES_path, sep = ""))
+survey_data <- read_csv(paste(project_directory, survey_path, sep = ""))
+survey_cleaned = survey_data %>%
+  select(c("Facility ID", "Facility Name", "HCAHPS Question", "Patient Survey Star Rating", "Start Date", "End Date")) %>%
+  pivot_wider(names_from = "HCAHPS Question", values_from =  "Patient Survey Star Rating") %>%
+  select(where(~ n_distinct(.) > 1))
+```
+
+Join the data and coerce one of the columns to be an integer. Plot the resulting data and we immediately see one issue we're going to run into - there are way more hospitals that are NOT owned by PE. Plus it looks like the averages are not significantly different - at least the data look relatively normal? I will work on modifying this script to look at each of the survey items, though I'm not sure any of them will be any different. 
+```{r}
+survey_owner_data = left_join(survey_test, PES_data, by = c("Facility ID"="Facility ID (CCN)"))
+survey_owner_data$"Nurse communication - star rating" = as.integer(survey_owner_data$`Nurse communication - star rating`)
+ggplot(survey_owner_data, aes(x = `Currently PE?`, y =`Nurse communication - star rating`)) +
+  geom_jitter(width = 0.2)
+t.test(survey_owner_data[survey_owner_data$`Currently PE?` == "Y",3],survey_owner_data[survey_owner_data$`Currently PE?` == "N",3])
+hist(as.numeric(unlist(survey_owner_data[!is.na(survey_owner_data[,3]),3])), breaks=0.5+seq(0,5))
+```
+
 
 
 
