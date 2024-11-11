@@ -1,0 +1,148 @@
+---
+title: Patient Survey
+output: html_document
+author: Jeffrey Mei
+date: 2024-11-11
+---
+
+# Patient Survey
+
+## Data Cleaning
+```{R}
+# Clean Data
+library(tidyverse)
+patient_survey <- read_csv("~/Documents/School/BIOS511/Project/data/HCAHPS-Hospital.csv")
+patient_survey <- patient_survey %>%
+  mutate(
+    `Patient Survey Star Rating` = na_if(`Patient Survey Star Rating`, "Not Available"),
+    `Patient Survey Star Rating` = as.numeric(`Patient Survey Star Rating`)
+  )
+
+rating_categories <- c(
+  "Nurse communication - star rating",
+  "Doctor communication - star rating",
+  "Staff responsiveness - star rating",
+  "Communication about medicines - star rating",
+  "Discharge information - star rating",
+  "Care transition - star rating",
+  "Cleanliness - star rating",
+  "Quietness - star rating",
+  "Overall hospital rating - star rating",
+  "Recommend hospital - star rating",
+  "Summary star rating"
+)
+```
+
+## Data Exploration
+```{R}
+# Get Mean of Each Rating
+patient_survey %>%
+  filter(`HCAHPS Question` %in% rating_categories) %>%
+  group_by(`HCAHPS Question`) %>%
+  summarize(
+    avg_rating = mean(`Patient Survey Star Rating`, na.rm = TRUE)
+  )
+```
+
+## Link Data with `hospital_tracker`
+
+```{R}
+# Link Data
+hospital_ratings <- left_join(
+  hospital_tracker,
+  patient_survey,
+  by = c("Facility ID (CCN)" = "Facility ID")
+)
+```
+
+```{R}
+# Summary Statistics
+hospital_ratings %>%
+  filter(`HCAHPS Question` %in% rating_categories) %>%
+  group_by(`HCAHPS Question`, `Currently PE?`) %>%
+  summarize(
+    avg_rating = mean(`Patient Survey Star Rating`, na.rm = TRUE)
+  )
+```
+
+```{R}
+# Define Categories for Ratings
+communication_categories <- c(
+  "Nurse communication - star rating",
+  "Doctor communication - star rating",
+  "Staff responsiveness - star rating"
+)
+overall_categories <- c(
+  "Overall hospital rating - star rating",
+  "Recommend hospital - star rating",
+  "Summary star rating"
+)
+other_categories <- c(
+  "Communication about medicines - star rating",
+  "Discharge information - star rating",
+  "Care transition - star rating",
+  "Cleanliness - star rating",
+  "Quietness - star rating"
+)
+
+# Plot Ratings Between PE and Public Hospitals
+# - rating_categories
+# - communication_categories
+# - overall_categories
+# - other_categories
+hospital_ratings %>%
+  filter(`HCAHPS Question` %in% other_categories) %>%
+  ggplot(aes(x = `Patient Survey Star Rating`, fill = `Currently PE?`)) +
+  geom_histogram(aes(y = ..density..), position = "identity", color = "black", bins = 5, alpha = 0.5) +
+  scale_fill_manual(values = c("Y" = "darkorange", "N" = "skyblue")) +
+  facet_wrap(~`HCAHPS Question`, scales = "free_y") +
+  labs(
+    x = "Hospital Overall Rating",
+    y = "Density",
+    fill = "Currently PE?"
+  ) +
+  theme_minimal(base_size = 15)
+```
+
+```{R}
+# Hospital Rating - Summary Statistics
+hospital_ratings %>%
+  filter(`HCAHPS Question` %in% rating_categories) %>%
+  group_by(`HCAHPS Question`, `Currently PE?`) %>%
+  summarize(
+    rating_mean = mean(`Patient Survey Star Rating`, na.rm = TRUE),
+    rating_sd = sd(`Patient Survey Star Rating`, na.rm = TRUE),
+    n = n()
+  ) %>%
+  print(n = Inf)
+```
+
+```{R}
+# T-Tests
+hospital_ratings %>%
+  filter(`HCAHPS Question` %in% rating_categories) %>%
+  group_by(`HCAHPS Question`) %>%
+  summarize(
+    # Run T-Test On Each Question/Rating
+    t_test = list(
+      t.test(
+        `Patient Survey Star Rating` ~ `Currently PE?`,
+        data = cur_data(),
+        var.equal = FALSE
+      )
+    )
+  ) %>%
+  # Pull Results From T-Test
+  mutate(
+    p_value = map_dbl(t_test, ~ .x$p.value),
+    mean_private = map_dbl(t_test, ~ .x$estimate["mean in group Y"]),
+    mean_public = map_dbl(t_test, ~ .x$estimate["mean in group N"])
+  ) %>%
+  select(
+    "HCAHPS Question",
+    "p_value",
+    "mean_private",
+    "mean_public"
+  ) %>%
+  arrange(`p_value`)
+```
