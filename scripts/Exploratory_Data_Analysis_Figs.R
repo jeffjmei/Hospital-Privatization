@@ -30,7 +30,9 @@ plot_usmap(regions = "states", data = PES_state, values = "percent_PE") +
   theme(legend.position = "right")
 
 # Plots total hospitals versus percent PE
-ggplot(data = PES_state, aes(x=percent_PE, y=total)) + 
+ggplot(data = PES_state, aes(x=percent_PE, y=total, label = state)) + 
   geom_point() + 
   xlab("Percentage of Hospitals Owned by PE") + ylab("Total Number of Hospitals") +
+  xlim(0,30) +
+  geom_text(data=subset(PES_state, percent_PE > 20 | total > 400), hjust = -0.4) +
   theme_minimal()
